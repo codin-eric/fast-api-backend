@@ -1,0 +1,2 @@
+class WrongElementException(Exception):
+    pass

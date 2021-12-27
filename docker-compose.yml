@@ -1,0 +1,30 @@
+version: '2.1'
+
+volumes:
+    db_data: {}
+
+services:
+  postgres-db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-data_science}
+      PGDATA: /data/postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  api:
+    image: fastapi-backend
+    environment:
+      - DB_CONNSTR=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres-db:5432/${POSTGRES_DB:-data_science}
+    ports:
+      - 8000:8000
+    links:
+      - postgres-db
+    depends_on:
+      - update-db
+    restart: unless-stopped

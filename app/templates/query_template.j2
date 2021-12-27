@@ -1,0 +1,11 @@
+SELECT {{ data['select'] | safe }}
+FROM {{ data['table'] | safe }}
+{% if data['where'] %}
+WHERE {{ data['where'] | safe }}
+{% endif%}
+{% if data['group_by'] %}
+GROUP BY {{ data['group_by'] | safe }}
+{% endif%}
+{% if data['order_by'] %}
+ORDER BY {{ data['order_by'] | safe }}
+{% endif%}
